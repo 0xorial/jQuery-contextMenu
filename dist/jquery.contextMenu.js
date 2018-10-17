@@ -1,7 +1,7 @@
 /**
- * jQuery contextMenu v2.7.0 - Plugin for simple contextMenu handling
+ * jQuery contextMenu v2.7.1 - Plugin for simple contextMenu handling
  *
- * Version: v2.7.0
+ * Version: v2.7.1
  *
  * Authors: Björn Brala (SWIS.nl), Rodney Rehm, Addy Osmani (patches for FF)
  * Web: http://swisnl.github.io/jQuery-contextMenu/
@@ -11,7 +11,7 @@
  * Licensed under
  *   MIT License http://www.opensource.org/licenses/mit-license
  *
- * Date: 2018-10-02T14:29:27.777Z
+ * Date: 2018-10-17T12:47:09.420Z
  */
 
 // jscs:disable
@@ -938,6 +938,14 @@
                 if (opt.$node) {
                     root.positionSubmenu.call(opt.$node, opt.$menu);
                 }
+
+				var key = data.contextMenuKey;
+                if (opt && opt.items && opt.items[key]) {
+                   var callbackEvent = opt.items[key].mouseOver;
+                   if (callbackEvent && $.isFunction(callbackEvent)) {
+                      callbackEvent.call(root.$trigger, key, root);
+                   }
+                }
             },
             // blur <command>
             blurItem: function (e) {
@@ -952,6 +960,14 @@
                 }
                 $this.removeClass(root.classNames.hover);
                 opt.$selected = null;
+
+				var key = data.contextMenuKey;
+                if (opt && opt.items && opt.items[key]) {
+                   var callbackEvent = opt.items[key].mouseLeave;
+                   if (callbackEvent && $.isFunction(callbackEvent)) {
+                      callbackEvent.call(root.$trigger, key, root);
+                   }
+                }
             }
         },
         // operations
@@ -2118,5 +2134,8 @@
 // export internal functions - undocumented, for hacking only!
     $.contextMenu.handle = handle;
     $.contextMenu.op = op;
+
     $.contextMenu.menus = menus;
+
+
 });
